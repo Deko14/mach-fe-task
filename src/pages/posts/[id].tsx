@@ -7,6 +7,7 @@ import { Container } from '@/components/shared/container';
 import { client } from '@/integrations/contentful/client';
 import { Banner } from '@/components/contentful/banner';
 import { revalidateDuration } from '@/utils/constants';
+import { PostI } from '@/utils/types';
 
 const Post = ({
   post,
@@ -41,7 +42,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       throw new Error(`Failed to fetch post, status code: ${res.status}`);
     }
 
-    const post = res.data;
+    const post: PostI = res.data;
 
     return {
       props: {
@@ -70,9 +71,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
       throw new Error(`Failed to fetch posts, status code: ${res.status}`);
     }
 
-    const posts = res.data;
+    const posts: PostI[] = res.data;
 
-    const paths = posts.map((post: { id: string }) => ({
+    const paths = posts.map((post: PostI) => ({
       params: { id: post.id.toString() },
     }));
 
