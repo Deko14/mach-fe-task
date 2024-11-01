@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getPosts } from '@/integrations/api/PostsApi/posts-api';
 import { PostI } from '@/utils/types';
@@ -35,6 +35,15 @@ export const usePosts = (
       setLoading(false);
     }
   };
+
+  // Monitor changes in the `router.query.page` parameter and update posts accordingly
+  useEffect(() => {
+    const newPage = parseInt(router.query.page as string) || 1;
+    if (newPage !== page) {
+      fetchPosts(newPage);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.query.page]);
 
   return {
     posts,
